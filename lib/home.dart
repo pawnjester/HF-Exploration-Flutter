@@ -1,0 +1,46 @@
+import 'package:explore_flutter/CockTailItem.dart';
+import 'package:flutter/material.dart';
+
+class HomePage extends StatefulWidget {
+
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextField(
+                decoration: InputDecoration(
+                    hintText: "Enter a search item"
+                ),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  minimumSize: const Size.fromHeight(50)
+                ),
+                  onPressed: () {
+
+              }, child: const Text("Search", style: TextStyle(color: Colors.white, fontSize: 20),)),
+            ),
+            const SizedBox(height: 20.0),
+            const CockTailItem()
+          ],
+        ),
+      ),
+    );
+  }
+}
