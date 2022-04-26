@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:explore_flutter/Cocktail.dart';
 import 'package:flutter/material.dart';
 
 class CockTailItem extends StatelessWidget {
+  final Cocktail cocktail;
 
-  const CockTailItem({Key? key}) : super(key: key);
+  const CockTailItem({Key? key, required this.cocktail}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +19,21 @@ class CockTailItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Image(image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'), width: 80,),
+              Image(
+                image: NetworkImage(cocktail.imageUrl),
+                width: 80,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("First data", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                    Text("Second data")
+                  children: [
+                    Text(
+                      cocktail.name,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    Text(cocktail.category)
                   ],
                 ),
               )
@@ -34,5 +43,4 @@ class CockTailItem extends StatelessWidget {
       ),
     );
   }
-
 }
