@@ -15,14 +15,8 @@ class _HomePageState extends State<HomePage> {
 
   bool isButtonClicked = false;
   String searchText = "";
+  List<Cocktail> listOfCocktails = [];
   final myController = TextEditingController();
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // print("testing");
-    futureCocktail = searchCocktails(searchText);
-  }
 
   @override
   void dispose() {
@@ -31,9 +25,21 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  void getApiCall(String name) {
+    searchCocktails(name).then((value) => {
+          setState(() {
+            listOfCocktails.clear();
+            listOfCocktails.addAll(value.cocktails);
+            isButtonClicked = true;
+          })
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("object ${myController.text}");
+    if(isButtonClicked) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -56,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     setState(() {
                       isButtonClicked = true;
-                      searchCocktails(myController.text);
+                      getApiCall(myController.text);
                     });
                   },
                   child: const Text(
@@ -66,29 +72,16 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 20.0),
             Expanded(
-                child: FutureBuilder<Drinks>(
-              future: futureCocktail,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data?.cocktails.length,
-                      itemBuilder: (context, index) {
-                        Cocktail cocktail = snapshot.data!.cocktails[index];
-                        if (isButtonClicked &&
-                            snapshot.data!.cocktails.isNotEmpty) {
-                          return CockTailItem(cocktail: cocktail);
-                        } else {
-                          return Text("");
-                        }
-                      });
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              },
-            ))
+                child: ListView.builder(
+                    itemCount: listOfCocktails.length,
+                    itemBuilder: (context, index) {
+                      Cocktail cocktail = listOfCocktails[index];
+                      if (isButtonClicked && listOfCocktails.isNotEmpty) {
+                        return CockTailItem(cocktail: cocktail);
+                      } else {
+                        return Text("");
+                      }
+                    }))
           ],
         ),
       ),
